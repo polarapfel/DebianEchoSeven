@@ -2,7 +2,7 @@ require 'open3'
 
 # https://github.com/polarapfel/EchoSeven/archive/v1.0.1.tar.gz
 
-desc 'Initialize your build environment, this will install all dependencies using apt. Uses sudo.'
+desc 'Initialize and install build dependencies. Run with sudo'
 
 task :init do
   stdout, stderr, status = Open3.capture3('cat /etc/debian_version')
@@ -25,8 +25,8 @@ task :init do
   end
 
   stdout, stderr, status = Open3.capture3('lsb_release -sr')
-  puts 'Version: ' + stdout
-  _debian_version = stdout
+  puts 'Version: ' + stdout.chomp
+  _debian_version = String.new(stdout).chomp
 
   if _debian_variant == 'Debian'
     case _debian_version
@@ -59,33 +59,11 @@ task :init do
       exit(1)
     end
   end
-  sh 'sudo apt-get update && sudo apt-get install -y debhelper dh-make debmake debmake-doc fakeroot git gnupg lintian patch patchutils pbuilder debian-policy developers-reference apt-transport-https dotnet-sdk-3.1'
-end
-
-task :get, [:version] do |task, args|
-  stdout, stderr, status = Open3.capture3("wget https://github.com/polarapfel/EchoSeven/archive/v#{args[:version]}.tar.gz -O echoseven-#{args[:version]}.tar.gz")
-  if status != 0
-    puts 'Something went wrong when downloading the release.'
-    puts "URL: https://github.com/polarapfel/EchoSeven/archive/#{args[:version]}.tar.gz"
-    puts "Error: #{stderr}"
-    exit(1)
-  end
-  stdout, stderr, status = Open3.capture3("tar xvzf echoseven-#{args[:version]}.tar.gz")
-  if status != 0
-    puts 'Something went wrong when unpacking the release.'
-    puts "URL: https://github.com/polarapfel/EchoSeven/archive/#{args[:version]}.tar.gz"
-    puts "Error: #{stderr}"
-    exit(1)
-  end
-  stdout, stderr, status = Open3.capture3("mv EchoSeven-#{args[:version]} echoseven-#{args[:version]}")
-  if status != 0
-    puts 'Something went wrong when preparing the release.'
-    puts "URL: https://github.com/polarapfel/EchoSeven/archive/#{args[:version]}.tar.gz"
-    puts "Error: #{stderr}"
-    exit(1)
-  end
+  sh 'sudo apt-get update && sudo apt-get install -y debhelper dh-make debmake debmake-doc gnupg lintian gzip apt-transport-https dotnet-sdk-3.1'
 end
 
 task :clean, [:version] do |task, args|
-
+  sh "rm -rf echoseven-#{args[:version]}"
+  sh "rm *-#{args[:version]}.tar.gz"
+  #sh "rm *_#{args[:version]}.orig.tar.gz"
 end
