@@ -62,6 +62,30 @@ task :init do
   sh 'sudo apt-get update && sudo apt-get install -y debhelper dh-make debmake debmake-doc gnupg lintian gzip apt-transport-https dotnet-sdk-3.1'
 end
 
+task :get, [:version] do |task, args|
+  stdout, stderr, status = Open3.capture3("wget https://github.com/polarapfel/EchoSeven/archive/v#{args[:version]}.tar.gz -O echoseven-#{args[:version]}.tar.gz")
+  if status != 0
+    puts 'Something went wrong when downloading the release.'
+    puts "URL: https://github.com/polarapfel/EchoSeven/archive/#{args[:version]}.tar.gz"
+    puts "Error: #{stderr}"
+    exit(1)
+  end
+  stdout, stderr, status = Open3.capture3("tar xvzf echoseven-#{args[:version]}.tar.gz")
+  if status != 0
+    puts 'Something went wrong when unpacking the release.'
+    puts "URL: https://github.com/polarapfel/EchoSeven/archive/#{args[:version]}.tar.gz"
+    puts "Error: #{stderr}"
+    exit(1)
+  end
+  stdout, stderr, status = Open3.capture3("mv EchoSeven-#{args[:version]} echoseven-#{args[:version]}")
+  if status != 0
+    puts 'Something went wrong when preparing the release.'
+    puts "URL: https://github.com/polarapfel/EchoSeven/archive/#{args[:version]}.tar.gz"
+    puts "Error: #{stderr}"
+    exit(1)
+  end
+end
+
 task :clean, [:version] do |task, args|
   sh "rm -rf echoseven-#{args[:version]}"
   sh "rm *-#{args[:version]}.tar.gz"
