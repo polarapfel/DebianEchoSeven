@@ -1,7 +1,7 @@
 # DebianEchoSeven
 Debian package build of [EchoSeven](https://github.com/polarapfel/EchoSeven) RFC 862 echo server.
 
-The actual Debian packages can be found on EchoSeven Github release page. This repository contains the boilerplate that allows you to build your own Debian package of EchoSeven if you're so inclined. You're probably more interested to learn how to generalize from this example so you may build a Debian package out of any .Net Core based project. This might help.
+The actual Debian packages can be found on [EchoSeven's Github release page](https://github.com/polarapfel/EchoSeven/releases). This repository contains the boilerplate that allows you to build your own Debian package of EchoSeven if you're so inclined. You're probably more interested to learn how to generalize from this example so you may build a Debian package out of any .Net Core based project. This might help.
 
 Take a look at the Rakefile which automates some of the steps.
 
