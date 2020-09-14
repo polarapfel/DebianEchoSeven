@@ -1,0 +1,43 @@
+Fixed upstream Makefile issues (amd64).
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-.PHONY: clean all install restore uninstall publish build post-install default
++.PHONY: clean all install restore uninstall publish build post-install default distclean
+ 
+ default: publish
+ 
+@@ -11,18 +11,20 @@
+ 	cd EchoSevenUtility && dotnet clean
+ 	if [ -d "./target" ]; then rm -rf ./target; fi
+ 
++distclean: clean
++
+ publish: restore
+ 	mkdir -p ./target/usr/share/man/man8
+ 	mkdir -p ./target/opt/EchoSeven
+ 	mkdir -p ./target/etc/EchoSeven
+ 	mkdir -p ./target/etc/systemd/system/
+ 	chmod -R 755 ./target/
+-	cd ./EchoSeven && dotnet publish -c Release -o ../target/opt/EchoSeven
++	cd ./EchoSeven && dotnet publish -c Release -o ../target/opt/EchoSeven --runtime linux-x64
+ 	cp ./packagefiles/EchoSeven.service ./target/etc/systemd/system/EchoSeven.service
+ 	cp ./packagefiles/appsettings.json ./target/etc/EchoSeven/appsettings.json
+-	cp ./packagefiles/echoseven ./target/usr/share/man/man8/echoseven.1
+-	chmod 0644 ./target/usr/share/man/man8/echoseven.1
+-	gzip ./target/usr/share/man/man8/echoseven.1
++	cp ./packagefiles/echoseven ./target/usr/share/man/man8/echoseven.8
++	chmod 0644 ./target/usr/share/man/man8/echoseven.8
++	gzip ./target/usr/share/man/man8/echoseven.8
+ 
+ build: publish
+ 
+@@ -43,7 +45,7 @@
+ 	rm -rf $(DESTDIR)/opt/EchoSeven
+ 	rm $(DESTDIR)/etc/systemd/system/EchoSeven.service
+ 	rm -rf $(DESTDIR)/etc/EchoSeven
+-	rm $(DESTDIR)/usr/share/man/man8/echoseven.1.gz
++	rm $(DESTDIR)/usr/share/man/man8/echoseven.8.gz
+ 
+ post-uninstall:
+ 	userdel echoseven

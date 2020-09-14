@@ -1,0 +1,18 @@
+Source: echoseven
+Section: contrib/net
+Priority: optional
+Maintainer: Tobias W. <tobiaw@microsoft.com>
+Build-Depends: debhelper (>= 10), dotnet-sdk-3.1
+Standards-Version: 4.1.2
+Homepage: https://github.com/polarapfel/EchoSeven
+Vcs-Git: https://github.com/polarapfel/EchoSeven.git
+
+Package: echoseven
+Architecture: amd64
+Depends: dotnet-runtime-3.1 | dotnet-sdk-3.1
+Description: RFC 862 high performance echo server
+ EchoSeven (or echoseven) is a RFC 862 echo server implementation. It's multi-threaded and high-performing,
+ has Systemd integration and is written in C# on .Net Core 3.1 and based on the NetCoreServer library.
+ .
+ It was mainly written as a C# template/sample of a Linux daemon with good integration into Systemd and such,
+ but it works perfectly fine for running an echo server.

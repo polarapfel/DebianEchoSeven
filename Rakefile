@@ -62,6 +62,8 @@ task :init do
   sh 'sudo apt-get update && sudo apt-get install -y debhelper dh-make debmake debmake-doc gnupg lintian gzip apt-transport-https dotnet-sdk-3.1'
 end
 
+desc 'Get and prepare source release, requires version'
+
 task :get, [:version] do |task, args|
   stdout, stderr, status = Open3.capture3("wget https://github.com/polarapfel/EchoSeven/archive/v#{args[:version]}.tar.gz -O echoseven-#{args[:version]}.tar.gz")
   if status != 0
@@ -84,10 +86,21 @@ task :get, [:version] do |task, args|
     puts "Error: #{stderr}"
     exit(1)
   end
+  sh "cd echoseven-#{args[:version]} && dh_make -y -s -f ../echoseven-#{args[:version]}.tar.gz"
+  sh "cp -r debian-#{args[:version]} echoseven-#{args[:version]}/ && mv echoseven-#{args[:version]}/debian"
 end
 
+desc 'Clean - best effort, requires version'
+
 task :clean, [:version] do |task, args|
-  sh "rm -rf echoseven-#{args[:version]}"
-  sh "rm *-#{args[:version]}.tar.gz"
-  #sh "rm *_#{args[:version]}.orig.tar.gz"
+  sh "if [ -d \"echoseven-#{args[:version]}\" ]; then rm -rf echoseven-#{args[:version]}; fi"
+  sh "if [ -f \"echoseven-#{args[:version]}.tar.gz\" ]; then rm echoseven-#{args[:version]}.tar.gz; fi"
+  sh "if [ -f \"echoseven_#{args[:version]}.orig.tar.gz\" ]; then rm echoseven_#{args[:version]}.orig.tar.gz; fi"
+  sh "rm echoseven_#{args[:version]}*"
+end
+
+desc 'Build Debian package, requires version'
+
+task :build, [:version] do |task, args|
+  sh "cd echoseven-#{args[:version]} && dpkg-buildpackage -us -uc"
 end
