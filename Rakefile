@@ -87,7 +87,7 @@ task :get, [:version] do |task, args|
     exit(1)
   end
   sh "cd echoseven-#{args[:version]} && dh_make -y -s -f ../echoseven-#{args[:version]}.tar.gz"
-  sh "cp -r debian-#{args[:version]} echoseven-#{args[:version]}/ && mv echoseven-#{args[:version]}/debian"
+  sh "cp -r debian-#{args[:version]} echoseven-#{args[:version]} && mv echoseven-#{args[:version]}/debian-#{args[:version]} echoseven-#{args[:version]}/debian"
 end
 
 desc 'Clean - best effort, requires version'
