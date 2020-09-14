@@ -5,6 +5,6 @@ The actual Debian packages can be found on EchoSeven Github release page. This r
 
 Take a look at the Rakefile which automates some of the steps.
 
-The key of building a Debian package is to ship your .Net Core project (or solution for that matter) with a GNU standard compliant Makefile. The Debian package build process will leverage expected default targets in your Makefile to create a Debian package. So take a look at the Makefile in the upstream source (e.g. EchoSeven) and the files in the debian-* directory.
+The key to building a Debian package is to ship your .Net Core project (or solution for that matter) with a GNU standard compliant Makefile. The Debian package build process will leverage expected default targets in your Makefile to create a Debian package. So take a look at the Makefile in the upstream source (e.g. EchoSeven) and the files in the debian-* directory.
 
 Make sure you go through the [Debian New Maintainers' Guide](https://www.debian.org/doc/manuals/maint-guide/index.en.html) to fill the gaps.
